@@ -43,7 +43,7 @@
       try {
         // make the API call
         const res:User = await getData(
-          'http://localhost:8000/signin', username, password
+          'https://aws-serverless.onrender.com/signin', username, password
         )
         setUser(res);
         resetFormFields()
