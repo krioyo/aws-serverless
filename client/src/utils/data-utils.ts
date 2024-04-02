@@ -1,6 +1,6 @@
 export const getData = async <T>(
     url: string,
-    email: string,
+    username: string,
     password: string
   )
   : Promise<T> => {
@@ -9,7 +9,7 @@ export const getData = async <T>(
       headers: {
         'Content-type': 'application/json'
       },
-      body: JSON.stringify({ email, password })
+      body: JSON.stringify({ username, password })
     });
 
     return await res.json();

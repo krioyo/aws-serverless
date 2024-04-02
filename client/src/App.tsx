@@ -10,12 +10,12 @@
   type User = {
     id: number,
     name: string,
-    email: string,
+    username: string,
     password: string
   }
 
   const defaultFormFields = {
-    email: '',
+    username: '',
     password: '',
   }
 
@@ -23,7 +23,7 @@
     // react hooks
     const [user, setUser] = useState<User | null>()
     const [formFields, setFormFields] = useState(defaultFormFields)
-    const { email, password } = formFields
+    const { username, password } = formFields
 
     const resetFormFields = () => {
       return (
@@ -43,12 +43,13 @@
       try {
         // make the API call
         const res:User = await getData(
-          'http://localhost:8000/login', email, password
+          'http://localhost:8000/signin', username, password
         )
         setUser(res);
         resetFormFields()
       } catch (error) {
         alert('User Sign In Failed');
+        console.log(error)
       }
     };
 
@@ -67,11 +68,11 @@
           <h2>Sign In</h2>
           <form onSubmit={handleSubmit}>
             <FormInput
-              label="Email"
-              type="email"
+              label="username"
+              type="username"
               required
-              name="email"
-              value={email}
+              name="username"
+              value={username}
               onChange={handleChange}
             />
             <FormInput
