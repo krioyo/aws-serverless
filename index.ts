@@ -43,21 +43,6 @@ interface FormInputs {
   ];
 
 
-  // route login
-  app.post('/login', (req: Request, res: Response) => {
-    const { email, password }:FormInputs = req.body;
-
-    const user = users.find(user => {
-      return user.email === email && user.password === password
-    });
-
-    if (!user) {
-      return res.status(404).send('User Not Found!')
-    }
-
-    return res.status(200).json(user)
-});
-
 app.post('/signup', async (request: Request, response: Response) => {
   const { username, name, password, email } = request.body;
   const srv = new CognitoService();
@@ -73,9 +58,11 @@ app.post('/signin', async (request: Request, response: Response) => {
   console.log(password);
   const srv = new CognitoService();
   const signinResponse = await srv.signIn(username, password);
-  response.status(signinResponse?.$metadata.httpStatusCode || 400).send(signinResponse?.AuthenticationResult);
+  if (!signinResponse) {
+      return response.status(404).send('User Not Found!')
+    }
+
+  return response.status(signinResponse?.$metadata.httpStatusCode || 400).json(signinResponse?.ChallengeParameters?.["USER_ID_FOR_SRP"]);
 });
 
-app.get('/current-user', requireAuth, async (request: Request, response: Response) => {
-  response.status(200).send(request.user);
-});
+
